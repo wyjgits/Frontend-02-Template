@@ -49,4 +49,23 @@ toString和valueOf会根据情况，+就会想valueOf,而作为属性名是就�
 
 装箱转换
 
+三、语句和声明
+
+completion Record
+[[type]]  normal,break,continue,return,throw
+[[value]]  基本类型
+[[target]] label
+
+简单语句：表达式、空、debugger、throw、continue、break、return
+复杂语句：
+block{},    [[type]] normal
+if,
+switch(在js中性能并不比if好),
+循环，[[type]] break continue,[[target]] label
+with，
+labelled，
+try [[type]]return [[target]]label
+
+四、函数调用（需要再理解）
+
 

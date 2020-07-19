@@ -27,4 +27,26 @@ a+b=c  不可  a+b是Right Handside
 4. Update Expression :a++   a-- --a ++a，
 ++ a ++ 会先和后面的结合  这是不合法的
 
-5.Unary（单目运算符）
+5.Unary（单目运算符） delete(接引用类型) void(把后面的内容变undefined) typeof + a -a ~a !a await a
+'**'是右结合的运算2**3**2是2**（3**2）；
+*%
++-
+<<  >>  >>>
+< > <= >= instanceof in(判断属性在对象或原型链中 prop in object，在返回true)
+
+== != === !==
+& ^ |
+&& ||
+?:
+
+二、类型转换
+拆箱转换：将object转基本类型
+ToPrimitive  object参与运算都会调用ToPrimitive过程，对象上有3个方法定义会影响到ToPri   mitive
+1. toString
+2.valueOf
+3.symbol.toPrimitive(如果定义了这个就会忽略toString和valueOf)
+toString和valueOf会根据情况，+就会想valueOf,而作为属性名是就会先调用toString
+
+装箱转换
+
+

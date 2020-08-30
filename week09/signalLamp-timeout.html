@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>signal-lamp</title>
+  <style>
+    .signal-lamp{
+      width:100px;
+      height:100px;
+      border-radius: 50%;
+      background:#eee;
+    }
+    .red.light{
+      background:red;
+    }
+    .yellow.light{
+      background:yellow;
+    }
+    .green.light{
+      background:green;
+    }
+  </style>
+</head>
+<body>
+  <div class="signal-lamp red"></div>
+  <div class="signal-lamp yellow"></div>
+  <div class="signal-lamp green"></div>
+  <button onclick="start()">start</button>
+  <script>
+    // 绿10红2黄5
+    // 信号灯
+    let signal = document.getElementsByClassName('signal-lamp');
+    // 当前点亮
+    let isLight = -1;
+    // 持续时长 红 黄 绿
+    let time = [5000,2000,10000];
+    // 点亮
+    function light(f){
+      if(isLight<0)return;
+      for(let i=0;i<3;i++){
+        isLight===i?signal[isLight].classList.add('light'):signal[i].classList.remove('light');
+      }
+      let timer = setTimeout(()=>{
+        isLight===2?isLight = 0:isLight += 1;
+        light();
+        clearTimeout(timer);
+      },time[isLight]);
+    }
+    function start(){
+      isLight = 0;
+      light();
+    }
+  </script>
+</body>
+</html>

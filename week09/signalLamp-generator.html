@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>signal-lamp</title>
+  <style>
+    .signal-lamp{
+      width:100px;
+      height:100px;
+      border-radius: 50%;
+      background:#eee;
+    }
+    .red.light{
+      background:red;
+    }
+    .yellow.light{
+      background:yellow;
+    }
+    .green.light{
+      background:green;
+    }
+  </style>
+</head>
+<body>
+  <div class="signal-lamp red"></div>
+  <div class="signal-lamp yellow"></div>
+  <div class="signal-lamp green"></div>
+  <button onclick="start()" id="startBtn">start</button>
+  <script>
+    // 绿10红2黄5
+    // 信号灯
+    let signal = document.getElementsByClassName('signal-lamp');
+    let startBtn = document.getElementById('startBtn');
+    // 点亮
+    function redLight(){
+      for(let i=0;i<3;i++){
+        i===0?signal[0].classList.add('light'):signal[i].classList.remove('light');
+      }
+    }
+    function yellowLight(){
+      for(let i=0;i<3;i++){
+        i===1?signal[1].classList.add('light'):signal[i].classList.remove('light');
+      }
+    }
+    function greenLight(){
+      for(let i=0;i<3;i++){
+        i===2?signal[2].classList.add('light'):signal[i].classList.remove('light');
+      }
+    }
+    function sleep(t){
+      return new Promise((res,rej)=>{
+        setTimeout(res,t);
+      });
+    }
+    function* start(){
+      while(true){
+        redLight();
+        yield sleep(5000);
+        yellowLight();
+        yield sleep(2000);
+        greenLight();
+        yield sleep(10000);
+      }
+    }
+    function run(iterator){
+      let {value,done} = iterator.next();
+      console.log(value,done)
+      if(done)
+        return;
+      if(value instanceof Promise)
+        value.then(()=>{
+          run(iterator);
+        })
+    }
+    function co(generator){
+      return function(){
+        return run(generator());
+      }
+    }
+    start = co(start);
+  </script>
+</body>
+</html>

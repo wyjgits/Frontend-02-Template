@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ticTacToe</title>
+  <style>
+    #board{
+      width:300px;
+      height:300px;
+    }
+    .cell{
+      box-sizing: border-box;
+      width:100px;
+      height:100px;
+      display: inline-block;
+      background:cadetblue;
+      border:1px solid #fff;
+      font-size:80px;
+      line-height: 98px;
+      text-align: center;
+      vertical-align: text-top;
+    }
+  </style>
+</head>
+<body>
+  <div id="board"></div>
+  <script>
+    // 棋盘
+    let pattern = [
+      0,0,0,
+      0,0,0,
+      0,0,0
+    ]
+    let chess = 1;
+    // 展示棋盘方法
+    function show(){
+      let board = document.getElementById('board');
+      board.innerHTML = '';
+      for(let i in pattern){
+        let cell = document.createElement('div');
+        cell.classList.add('cell');
+        cell.innerText = pattern[i]===1?'▽':
+                         pattern[i]===2?'○':'';
+        cell.addEventListener('click',()=>move(i));
+        board.appendChild(cell);
+      }
+    }
+    // 初始调用展示棋盘
+    show();
+    // 移入棋子方法
+    function move(i){
+      if(pattern[i]===0){
+        pattern[i]=chess;
+        show();
+        if(check()){
+          setTimeout(()=>{
+            alert(pattern[i]===1?'▽ 获胜！': '○ 获胜！');
+          });
+        }
+        chess = 3-chess;
+      }
+    }
+    function check(){
+      // 判断是否有行相同
+      for(let i =0;i<3;i++){
+        let win = true;
+        for(let j = 0;j<3;j++){
+          if(pattern[i*3+j]!==chess){
+            win = false
+          }
+        }
+        if(win)return true;
+      } 
+      // 判断是否有列相同
+      for(let i =0;i<3;i++){
+        let win = true;
+        for(let j = 0;j<3;j++){
+          if(pattern[j*3+i]!==chess){
+            win = false
+          }
+        }
+        if(win)return true;
+      } 
+      // 判断斜向
+      {
+        let win = true;
+        for(let i =0;i<3;i++){
+          pattern[i*4]!==chess?win=false:'';
+        } 
+        if(win)return true;
+      }
+      // 判断斜向
+      {
+        let win = true;
+        for(let i =0;i<3;i++){
+          pattern[(i*3+(3-i))-1]!==chess?win=false:'';
+        } 
+        if(win)return true;
+      }
+    }
+  </script>
+</body>
+</html>

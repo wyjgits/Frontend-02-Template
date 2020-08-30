@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>map</title>
+  <style>
+    #container{
+      width:700px;
+      height:700px;
+      line-height: 7px;
+    }
+    .cell{
+      width:7px;
+      height:7px;
+      line-height: 7px;
+      display: inline-block;
+      box-sizing: border-box;
+      border:1px solid #fff;
+      vertical-align: top;
+      background:#eee;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+
+  </div>
+  <button onclick="save()">save</button>
+  <script>
+    function save(){  
+      window.localStorage.setItem('map',JSON.stringify(map));
+    }
+    let map = window.localStorage.map?JSON.parse(window.localStorage.map) : new Array(10000).fill(0);
+    let container = document.getElementById('container');
+    let frag = document.createDocumentFragment();
+    for(let y =0;y<100;y++){
+      for(let x = 0; x<100;x++){
+        let cell = document.createElement('div');
+        cell.classList.add('cell');
+        if(map[100*y+x]===1){
+          cell.style.backgroundColor = 'black';
+        }
+        cell.addEventListener('mousemove',()=>{
+          if(mousedown){
+            if(clear){
+              cell.style.backgroundColor = '';
+              map[100*y+x] = 0;
+            }else{
+              cell.style.backgroundColor = 'black';
+              map[100*y+x] = 1;
+            }
+          }
+        })
+        frag.appendChild(cell);
+      }
+    }
+    container.appendChild(frag);
+
+    let mousedown = false;
+    let clear = false;
+    document.addEventListener('mousedown',e=>{
+      mousedown = true;
+      clear = (e.which ===3);
+    });
+    document.addEventListener('mouseup',()=>{
+      mousedown = false;
+    });
+    document.addEventListener('contextmenu',e=>e.preventDefault());
+    function path(map,start,end){
+      let mapCopy = Object.create(map);
+      let queue = [start];
+      function insert(x,y){
+        if(x<0 || x>=100 || y<0 || y>=100){
+          return;
+        }
+        if(mapCopy[y*100+x])
+          return;
+        
+          mapCopy[y*100+x] = 2;
+        queue.push([x,y]);
+      }
+      while(queue.length){
+        let [x,y] = queue.shift();
+        console.log(x,y);
+        if(x===end[0]&&y===end[1]){
+          return true;
+        }
+        insert(x-1,y);
+        insert(x,y-1);
+        insert(x+1,y);
+        insert(x,y+1);
+      }
+      return false;
+    }
+  </script>
+</body>
+</html>

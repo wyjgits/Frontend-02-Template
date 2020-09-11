@@ -1,0 +1,58 @@
+<div id="container">
+  Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas natus non voluptatum nesciunt provident quo minus deserunt earum. Voluptatum alias dignissimos, modi harum autem repellendus beatae voluptas aliquam magnam expedita.
+  Voluptatem officia autem qui nemo laboriosam odit voluptates vel aperiam! Tempora sed, odit dolorem esse odio dicta molestiae? Totam praesentium, reiciendis impedit harum voluptatibus eaque fugit esse obcaecati aliquam exercitationem.
+  Exercitationem unde ad totam neque, non veritatis temporibus quae nihil beatae magni reprehenderit aliquid labore error, ipsa iure quia, atque rerum incidunt cum assumenda esse nam. Perferendis et autem voluptatibus!
+  Ipsum quia dolores laborum necessitatibus, repudiandae exercitationem earum vel alias distinctio? Placeat natus repudiandae quisquam, quidem iure consequuntur velit sit, reprehenderit, eum voluptatem saepe porro? Quia impedit ea blanditiis natus.
+  Consequatur consectetur voluptatem labore maxime totam quibusdam blanditiis, animi harum ratione repudiandae explicabo praesentium possimus, eius, dolore nam eveniet sunt reiciendis dolorem ullam beatae dolorum voluptatibus ut! Minima, quaerat laudantium.
+</div>
+<div id="dragable" style="display: inline-block; width:100px;height:100px;background:cornflowerblue;"></div>
+<script>
+  let dragable = document.getElementById('dragable');
+
+  dragable.addEventListener('mousedown',event=>{
+    let baseX = event.clientX-event.offsetX;
+    let baseY = event.clientY-event.offsetY;
+    let startX = event.clientX,startY = event.clientY;
+    let move = e=>{
+      // dragable.style.transform = `translate(${baseX+e.clientX-startX}px,${baseY+e.clientY-startY}px)`
+      let range = getNearest(e.clientX,e.clientY);
+      console.log(range);
+      range.insertNode(dragable);
+    }
+    let up = e=>{
+      document.removeEventListener('mousemove',move);
+      document.removeEventListener('mouseup',up);
+    }
+    document.addEventListener('mousemove',move)
+    document.addEventListener('mouseup',up)
+  })
+  let ranges = [];
+  let container = document.getElementById('container');
+  for(let i= 0;i<container.childNodes[0].textContent.length;i++){
+    let range = document.createRange();
+    range.setStart(container.childNodes[0],i);
+    range.setEnd(container.childNodes[0],i);
+
+    console.log(range.getBoundingClientRect())
+    ranges.push(range);
+  }
+
+  function getNearest(x,y){
+    let min = Infinity;
+    let nearest = null;
+    console.log(ranges)
+    for(let range of ranges){
+      let rect = range.getBoundingClientRect();
+      let distance = (rect.x - x) ** 2 + (rect.y - y)**2;
+
+      if(distance < min){
+        nearest = range;
+        min = distance;
+      }
+
+    }
+      return nearest;
+  }
+  document.addEventListener('selectstart',e=>e.preventDefault());
+
+</script> 

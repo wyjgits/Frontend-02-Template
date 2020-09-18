@@ -34,5 +34,4 @@
 
 * ISO-OSI七层网络模型
 * 物理层——数据链路（4G/5G/WI-FI）——网络(Internet,IP协议)——传输(TCP、UDP)——会话——表示——应用(http)
-* 1
 
